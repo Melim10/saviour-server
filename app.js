@@ -16,14 +16,13 @@ require("./config")(app);
 
 // 👇 Start handling routes here
 const indexRoutes = require("./routes/index.routes");
-const projectRoutes = require("./routes/project.routes")
-const taskRoutes = require("./routes/task.routes")
 const authRoutes = require("./routes/auth.routes")
+const questionRoutes= require("./routes/question.routes")
 
 app.use("/api", indexRoutes);
-app.use("/api", projectRoutes);
-app.use("/api", taskRoutes);
+app.use("/api", questionRoutes);
 app.use("/auth", authRoutes)
+
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);

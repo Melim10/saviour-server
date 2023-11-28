@@ -13,6 +13,14 @@ const userSchema = new Schema(
     },
     name:{
       type: String, required:true
+    },
+    skills:{
+      type:[String],
+      default:[]
+    },
+    picture:{
+      type: String,
+      default:"https://cdn1.iconfinder.com/data/icons/user-interface-664/24/User-512.png"
     }
   }
 );
