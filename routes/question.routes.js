@@ -63,4 +63,26 @@ router.delete('/questions/:questionId', (req,res)=>{
         })
 })
 
+router.put('/:questionId/answers', async (req, res) => {
+    try {
+    const questionId = req.params.questionId;
+    const newAnswer = req.body.answers; // Assuming newAnswer is a string or an array of strings
+    
+    
+    // Use $push to add a new answer to the answers array
+    const updatedQuestion = await Question.findByIdAndUpdate(
+      questionId,
+      { $push: { answers: newAnswer } },
+      { new: true }
+    );
+    
+    res.json(updatedQuestion);
+    
+    
+    } catch (error) {
+    console.error('Error updating answers:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+    }
+    });
+
 module.exports = router;
