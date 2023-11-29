@@ -7,6 +7,10 @@ const questionSchema = new Schema({
   description: { type: String },
   skills: [],
   answers: [],
+  solved:{
+    type: Boolean,
+    default: false
+  }
 });
 
 module.exports = model("Question", questionSchema);

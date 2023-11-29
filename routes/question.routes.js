@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 const User = require("../models/User.model");
+const Answer = require('../models/Answer.model')
 const Question = require("../models/Question.model");
 
 router.get("/questions", (req, res) => {
@@ -63,26 +64,22 @@ router.delete('/questions/:questionId', (req,res)=>{
         })
 })
 
-router.put('/:questionId/answers', async (req, res) => {
-    try {
+router.put('/questions/:questionId/answers', async (req, res) => {
+  try {
     const questionId = req.params.questionId;
-    const newAnswer = req.body.answers; // Assuming newAnswer is a string or an array of strings
-    
-    
-    // Use $push to add a new answer to the answers array
+    const newAnswer = req.body; 
+
+   
     const updatedQuestion = await Question.findByIdAndUpdate(
       questionId,
       { $push: { answers: newAnswer } },
       { new: true }
     );
-    
+
     res.json(updatedQuestion);
-    
-    
-    } catch (error) {
+  } catch (error) {
     console.error('Error updating answers:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-    }
-    });
-
+  }
+});
 module.exports = router;
