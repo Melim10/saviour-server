@@ -17,8 +17,7 @@ const userSchema = new Schema(
       unique: true
     },
     skills:{
-      type:[String],
-      default:[]
+      type:[String]
     },
     picture:{
       type: String,
