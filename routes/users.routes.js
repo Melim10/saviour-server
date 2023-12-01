@@ -1,7 +1,5 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
-const bcrypt= require("bcryptjs")
-const saltRounds = 10;
 router.get("/users", (req, res) => {
   User.find()
     .then((users) => {
@@ -48,16 +46,12 @@ router.put("/users/:userId/skills", (req, res)=>{
 })
 router.put("/users/:userId", (req, res) => {
   const { userId } = req.params;
-  const { name, skills, picture, password } = req.body;
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const hashedPassword = bcrypt.hashSync(password, salt);
+  const { skills, picture } = req.body;
   User.findByIdAndUpdate(
     userId,
     {
       $push: { skills: skills },
-      name: name,
-      picture: picture,
-      password: hashedPassword,
+      picture: picture
     },
     { new: true }
   )
