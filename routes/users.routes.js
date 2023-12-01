@@ -52,4 +52,23 @@ router.put("/users/:userId", (req, res) => {
     });
 });
 
+router.put("/users/:userId/skills", (req, res)=>{
+  const { skill, remove } = req.body;
+  const {userId} = req.params
+
+  const user = User.findById(userId); 
+
+  if (!user) {
+    return res.status(404).json({ message: 'No User' });
+  }
+
+  if (remove) {
+    const updatedSkills = user.skills.filter((item) => item !== skill);
+    user.skills = updatedSkills;
+    User.findByIdAndUpdate(userId, {skills: updatedSkills}, {new: true})
+
+    res.status(200).json({ message: 'Skill removed successfuly' });
+  }
+  
+})
 module.exports = router;
