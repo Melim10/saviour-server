@@ -1,9 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
 const bcrypt= require("bcryptjs")
-
 const saltRounds = 10;
-
 router.get("/users", (req, res) => {
   User.find()
     .then((users) => {
@@ -14,10 +12,8 @@ router.get("/users", (req, res) => {
       res.status(500).json({ message: err.message });
     });
 });
-
 router.get("/users/:userId", (req, res) => {
   const { userId } = req.params;
-
   User.findById(userId)
     .then((response) => {
       res.status(200).json(response);
@@ -26,14 +22,35 @@ router.get("/users/:userId", (req, res) => {
       res.status(500).json({ message: err });
     });
 });
-
+router.put("/users/:userId/skills", (req, res)=>{
+  const { skill} = req.body;
+  const {userId} = req.params
+  User.findById(userId).then((user)=>{
+    
+    if (!user) {
+      return res.status(404).json({ message: 'No User' });
+    }
+  
+    if (skill) {
+      User.findByIdAndUpdate(userId, {$pull: {skills: skill}}, {new: true})
+      .then((user)=>{
+        updatedSkills = user.skills
+        res.status(200).json({ skills: updatedSkills});
+      })
+      .catch((err)=>{
+        res.status(500).json({ message: 'Skill was not removed.' });
+      })
+    }
+    else{
+      res.status(500).json({ message: 'Skill was not removed.' });
+    }  
+  }); 
+})
 router.put("/users/:userId", (req, res) => {
   const { userId } = req.params;
   const { name, skills, picture, password } = req.body;
-
   const salt = bcrypt.genSaltSync(saltRounds);
   const hashedPassword = bcrypt.hashSync(password, salt);
-
   User.findByIdAndUpdate(
     userId,
     {
@@ -51,24 +68,4 @@ router.put("/users/:userId", (req, res) => {
       res.json({ message: "Failed to Update User." });
     });
 });
-
-router.put("/users/:userId/skills", (req, res)=>{
-  const { skill, remove } = req.body;
-  const {userId} = req.params
-
-  const user = User.findById(userId); 
-
-  if (!user) {
-    return res.status(404).json({ message: 'No User' });
-  }
-
-  if (remove) {
-    const updatedSkills = user.skills.filter((item) => item !== skill);
-    user.skills = updatedSkills;
-    User.findByIdAndUpdate(userId, {skills: updatedSkills}, {new: true})
-
-    res.status(200).json({ message: 'Skill removed successfuly' });
-  }
-  
-})
 module.exports = router;
