@@ -41,10 +41,11 @@ router.get("/questions/:questionId", (req, res) => {
 router.put("/questions/:questionId", (req, res) => {
   // Object destructuring
   const { questionId } = req.params;
-  const { postedBy, title, description, skills } = req.body;
+  const { postedBy, title, description, skills, solved } = req.body;
 
-  Question.findByIdAndUpdate(questionId, { postedBy, title, description, skills }, { new: true })
+  Question.findByIdAndUpdate(questionId, { postedBy, title, description, skills, solved }, { new: true })
     .then(() => {
+      console.log("posted", req.body)
       res.json({ message: "Question Updated!" });
     })
     .catch((error) => {
