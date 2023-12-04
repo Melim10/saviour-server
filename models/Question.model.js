@@ -10,7 +10,8 @@ const questionSchema = new Schema({
   solved:{
     type: Boolean,
     default: false
-  }
+  },
+  userId: {type: String}
 });
 
 module.exports = model("Question", questionSchema);

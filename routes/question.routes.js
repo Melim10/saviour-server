@@ -18,7 +18,7 @@ router.get("/questions", (req, res) => {
 });
 
 router.post("/questions", (req, res) => {
-  const { postedBy, title, description, skills, answers } = req.body;
+  const { postedBy, title, description, skills, answers, userId } = req.body;
 
   /*  "What if I don't have all the required fields with information?"  */
   if (postedBy === "" || title === "" || description === "") {
@@ -26,7 +26,7 @@ router.post("/questions", (req, res) => {
     return; // -> return will stop the code.
   }
 
-  Question.create({ postedBy, title, description, skills, answers })
+  Question.create({ postedBy, title, description, skills, answers, userId })
     .then((response) => res.json(response))
     .catch((error) => res.json(error));
 });
