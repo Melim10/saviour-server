@@ -18,7 +18,7 @@ router.get("/questions", (req, res) => {
 });
 
 router.post("/questions", (req, res) => {
-  const { postedBy, title, description, skills, answers, userId } = req.body;
+  const { postedBy, title, description, skills, answers, userId, when } = req.body;
 
   /*  "What if I don't have all the required fields with information?"  */
   if (postedBy === "" || title === "" || description === "") {
@@ -26,7 +26,7 @@ router.post("/questions", (req, res) => {
     return; // -> return will stop the code.
   }
 
-  Question.create({ postedBy, title, description, skills, answers, userId })
+  Question.create({ postedBy, title, description, skills, answers, userId , when})
     .then((response) => res.json(response))
     .catch((error) => res.json(error));
 });
@@ -41,10 +41,11 @@ router.get("/questions/:questionId", (req, res) => {
 router.put("/questions/:questionId", (req, res) => {
   // Object destructuring
   const { questionId } = req.params;
-  const { postedBy, title, description, skills } = req.body;
+  const { postedBy, title, description, skills, solved } = req.body;
 
-  Question.findByIdAndUpdate(questionId, { postedBy, title, description, skills }, { new: true })
+  Question.findByIdAndUpdate(questionId, { postedBy, title, description, skills, solved }, { new: true })
     .then(() => {
+      console.log("posted", req.body)
       res.json({ message: "Question Updated!" });
     })
     .catch((error) => {
@@ -67,8 +68,7 @@ router.delete('/questions/:questionId', (req,res)=>{
 router.put('/questions/:questionId/answers', async (req, res) => {
   try {
     const questionId = req.params.questionId;
-    const newAnswer = req.body; 
-
+    const newAnswer = req.body;
    
     const updatedQuestion = await Question.findByIdAndUpdate(
       questionId,
@@ -82,4 +82,5 @@ router.put('/questions/:questionId/answers', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 module.exports = router;

@@ -3,15 +3,18 @@ const { Schema, model } = mongoose;
 
 const questionSchema = new Schema({
   postedBy: { type: String },
-  title: { type: String, required: true},
+  title: { type: String, required: true },
   description: { type: String },
   skills: [],
   answers: [],
-  solved:{
+  solved: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  userId: {type: String}
+  when: {
+    type: String,
+  },
+  userId: {type: String},
 });
 
 module.exports = model("Question", questionSchema);
