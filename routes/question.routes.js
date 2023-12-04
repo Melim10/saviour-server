@@ -8,6 +8,13 @@ const Question = require("../models/Question.model");
 
 router.get("/questions", (req, res) => {
   Question.find()
+  .populate({
+    path: 'answers',
+    populate: {
+      path: 'postedBy',
+      model: 'User'
+    }
+  })
     .then((questions) => {
       res.status(200).json(questions);
     })
@@ -21,7 +28,13 @@ router.get("/questions", (req, res) => {
 router.get("/questions/:questionId", (req, res) => {
   const { questionId } = req.params;
   Question.findById(questionId)
-    .populate("answers")
+  .populate({
+    path: 'answers',
+    populate: {
+      path: 'postedBy',
+      model: 'User'
+    }
+  })
     .then((question) => res.json(question))
     .catch((error) => res.json(error));
 });

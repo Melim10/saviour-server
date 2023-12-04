@@ -22,7 +22,14 @@ const userSchema = new Schema(
     picture:{
       type: String,
       default:"https://cdn1.iconfinder.com/data/icons/user-interface-664/24/User-512.png"
-    }
+    },
+    jobTitle: {
+      type:String,
+    },
+    answers: [{ 
+      type: Schema.Types.ObjectId, ref: "Answer" 
+    }],
+
   }
 );
 

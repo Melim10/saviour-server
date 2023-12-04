@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Answer = require('../models/Answer.model')
 const Question = require('../models/Question.model')
+const User = require('../models/User.model')
 
 router.get("/answers", (req,res)=>{
     Answer.find()
@@ -15,7 +16,7 @@ router.get("/answers", (req,res)=>{
 
 router.post("/questions/:questionId/addAnswer", (req, res) => {
     const {questionId} = req.params;
-    const {  postedBy,
+    const {postedBy,
         description,
         when,
         question} = req.body;
@@ -26,17 +27,37 @@ router.post("/questions/:questionId/addAnswer", (req, res) => {
     }
 
 
-      Answer.create({ postedBy,
+    Answer.create({
+        postedBy,
         description,
         when,
-        question: questionId})
-      .then((newAnswer)=>{
-          return Question.findByIdAndUpdate(questionId, {
-              $push: {answers: newAnswer._id}
-          })
-      })
-      .then((response)=> res.json(response))
-      .catch((error)=> res.json(error))
-  });
+        question: questionId
+    })
+        .then((newAnswer) => {
+            // Update both the question and the user
+            const updateQuestion = Question.findByIdAndUpdate(questionId, {
+                $push: { answers: newAnswer._id }
+            });
+    
+            const updateUser = User.findByIdAndUpdate(postedBy, {
+                $push: { answers: newAnswer._id }
+            });
+    
+            // Use Promise.all to wait for both updates to complete
+            return Promise.all([updateQuestion, updateUser]);
+        })
+        .then(() => {
+            console.log(postedBy);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+        });
+    
+  
+
+
+
+
 
 module.exports = router;

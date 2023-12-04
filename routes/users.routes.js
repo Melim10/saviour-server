@@ -13,6 +13,16 @@ router.get("/users", (req, res) => {
 router.get("/users/:userId", (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
+  .populate("answers")
+  .populate({
+    path: 'answers',
+    populate: {
+      path: 'question',
+      model: 'Question',
+    }
+  })
+  
+  
     .then((response) => {
       res.status(200).json(response);
     })
@@ -46,12 +56,13 @@ router.put("/users/:userId/skills", (req, res)=>{
 })
 router.put("/users/:userId", (req, res) => {
   const { userId } = req.params;
-  const { skills, picture } = req.body;
+  const { skills, picture, jobTitle } = req.body;
   User.findByIdAndUpdate(
     userId,
     {
       $push: { skills: skills },
-      picture: picture
+      picture: picture,
+      jobTitle: jobTitle
     },
     { new: true }
   )
