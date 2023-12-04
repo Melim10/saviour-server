@@ -6,7 +6,7 @@ const questionSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String },
   skills: [],
-  answers: [],
+  answers: [{ type: mongoose.Types.ObjectId, ref: "Answer" }],
   solved: {
     type: Boolean,
     default: false,

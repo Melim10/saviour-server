@@ -17,6 +17,15 @@ router.get("/questions", (req, res) => {
     });
 });
 
+
+router.get("/questions/:questionId", (req, res) => {
+  const { questionId } = req.params;
+  Question.findById(questionId)
+    .populate("answers")
+    .then((question) => res.json(question))
+    .catch((error) => res.json(error));
+});
+
 router.post("/questions", (req, res) => {
   const { postedBy, title, description, skills, answers, userId, when } = req.body;
 
@@ -31,12 +40,6 @@ router.post("/questions", (req, res) => {
     .catch((error) => res.json(error));
 });
 
-router.get("/questions/:questionId", (req, res) => {
-  const { questionId } = req.params;
-  Question.findById(questionId)
-    .then((question) => res.json(question))
-    .catch((error) => res.json(error));
-});
 
 router.put("/questions/:questionId", (req, res) => {
   // Object destructuring

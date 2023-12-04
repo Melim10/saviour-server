@@ -5,7 +5,9 @@ const answerSchema = new Schema({
   // Define the properties for each answer object
   postedBy: { type: String },
   description: { type: String },
-  // Add more properties as needed
+  when: {type: String},
+  question: { type: mongoose.Types.ObjectId, ref: "Question" },
+  cool:{type: Boolean, default: false}
 });
 
 module.exports = model("Answer", answerSchema);
