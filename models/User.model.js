@@ -29,6 +29,7 @@ const userSchema = new Schema(
     answers: [{ 
       type: Schema.Types.ObjectId, ref: "Answer" 
     }],
+    correctAnswers: {type: Number, default: 0}
 
   }
 );

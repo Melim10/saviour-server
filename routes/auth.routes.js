@@ -12,7 +12,7 @@ const saltRounds = 10;
 
 // POST '/auth/signup' - Creates a new user in the database
 router.post("/signup", (req, res) => {
-  const { email, password, name, skills } = req.body;
+  const { email, password, name, jobTitle } = req.body;
   /* doing object destructuring is the same as: 
     const email = req.body.email; 
     const password = req.body.password; 
@@ -56,12 +56,12 @@ router.post("/signup", (req, res) => {
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
 
-      return User.create({ email, password: hashedPassword, name, skills });
+      return User.create({ email, password: hashedPassword, name, jobTitle });
     })
     .then((createdUser) => {
-      const { email, name, _id , skills} = createdUser;
+      const { email, name, _id , jobTitle} = createdUser;
 
-      const user = { email, name, _id , skills };
+      const user = { email, name, _id , jobTitle };
 
       res.status(201).json({ user });
     })

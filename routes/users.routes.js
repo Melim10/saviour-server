@@ -56,13 +56,14 @@ router.put("/users/:userId/skills", (req, res)=>{
 })
 router.put("/users/:userId", (req, res) => {
   const { userId } = req.params;
-  const { skills, picture, jobTitle } = req.body;
+  const { skills, picture, jobTitle, correctAnswers } = req.body;
   User.findByIdAndUpdate(
     userId,
     {
       $push: { skills: skills },
       picture: picture,
-      jobTitle: jobTitle
+      jobTitle: jobTitle,
+      correctAnswers: correctAnswers
     },
     { new: true }
   )

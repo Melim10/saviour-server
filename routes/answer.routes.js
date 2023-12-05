@@ -53,7 +53,35 @@ router.post("/questions/:questionId/addAnswer", (req, res) => {
             console.log(error);
         });
         });
+
+        router.get("/answers/:answerId", (req,res)=>{
+            const {answerId} = req.params
+            Answer.findById(answerId)
+            .then((response)=>{
+                res.status(200).json(response)
+            })
+            .catch((error)=> {
+                res.status(500).json({error: error.message})
+            })
+        })
     
+router.put("/answers/:answerId", (req, res) => {
+            // Object destructuring
+            const { answerId } = req.params;
+            const { postedBy,
+                description,
+                when,
+            cool} = req.body;
+          
+            Answer.findByIdAndUpdate(answerId, { postedBy, description, when, cool }, { new: true })
+              .then(() => {
+                console.log("posted", req.body)
+                res.json({ message: "Question Updated!" });
+              })
+              .catch((error) => {
+                res.json({ message: "Failed to Update Question." });
+              });
+          });
   
 
 
