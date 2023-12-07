@@ -6,6 +6,7 @@ const User = require('../models/User.model')
 
 router.get("/answers", (req,res)=>{
     Answer.find()
+    .populate("postedBy")
     .then((response)=>{
         res.status(200).json(response)
     })
@@ -57,6 +58,7 @@ router.post("/questions/:questionId/addAnswer", (req, res) => {
         router.get("/answers/:answerId", (req,res)=>{
             const {answerId} = req.params
             Answer.findById(answerId)
+            .populate("postedBy")
             .then((response)=>{
                 res.status(200).json(response)
             })
